@@ -18,6 +18,9 @@ TEST(JSONParseTest, ParseNull) {
   value.type = jpp::Type::True;
 
   EXPECT_EQ(jpp::Result::OK, jpp::JSON::Parse(&value, "null"));
+  EXPECT_EQ(jpp::Result::ExpectValue, jpp::JSON::Parse(&value, ""));
+  EXPECT_EQ(jpp::Result::ExpectValue, jpp::JSON::Parse(&value, " "));
+  EXPECT_EQ(jpp::Result::InvalidValue, jpp::JSON::Parse(&value, "nul"));
   EXPECT_EQ(jpp::Result::RootNotSingular, jpp::JSON::Parse(&value, "null x"));
   EXPECT_EQ(jpp::Type::Null, jpp::JSON::GetType(&value));
 }
