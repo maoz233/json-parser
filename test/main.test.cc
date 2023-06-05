@@ -10,7 +10,7 @@
  */
 #include <gtest/gtest.h>
 
-TEST(jpp_main_test, BasicAssertions) {
+TEST(BasicTest, BasicAssertions) {
   // Expect two strings not to be equal
   EXPECT_STRNE("hello", "world");
   // Expect equality

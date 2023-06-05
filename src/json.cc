@@ -35,6 +35,10 @@ Result JSON::Parse(Value* value, const char* json) {
 
 Result JSON::ParseValue(Context* context, Value* value) {
   switch (*context->json) {
+    case 't':
+      return ParseTrue(context, value);
+    case 'f':
+      return ParseFalse(context, value);
     case 'n':
       return ParseNull(context, value);
     case '\0':
@@ -64,6 +68,34 @@ Result JSON::ParseNull(Context* context, Value* value) {
 
   context->json += 3;
   value->type = Type::Null;
+
+  return Result::OK;
+}
+
+Result JSON::ParseFalse(Context* context, Value* value) {
+  EXPECT(context, 'f');
+
+  if (context->json[0] != 'a' || context->json[1] != 'l' ||
+      context->json[2] != 's' || context->json[3] != 'e') {
+    return Result::InvalidValue;
+  }
+
+  context->json += 4;
+  value->type = Type::False;
+
+  return Result::OK;
+}
+
+Result JSON::ParseTrue(Context* context, Value* value) {
+  EXPECT(context, 't');
+
+  if (context->json[0] != 'r' || context->json[1] != 'u' ||
+      context->json[2] != 'e') {
+    return Result::InvalidValue;
+  }
+
+  context->json += 3;
+  value->type = Type::True;
 
   return Result::OK;
 }

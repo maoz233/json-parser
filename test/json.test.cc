@@ -13,10 +13,26 @@
 #define INCLUDE_JPP_JSON
 #include "json.h"
 
-TEST(jpp_json_test, BasicAssertions) {
+TEST(JSONParseTest, ParseNull) {
   jpp::Value value{};
   value.type = jpp::Type::True;
 
   EXPECT_EQ(jpp::Result::OK, jpp::JSON::Parse(&value, "null"));
   EXPECT_EQ(jpp::Type::Null, jpp::JSON::GetType(&value));
+}
+
+TEST(JSONParseTest, ParseFalse) {
+  jpp::Value value{};
+  value.type = jpp::Type::Null;
+
+  EXPECT_EQ(jpp::Result::OK, jpp::JSON::Parse(&value, "false"));
+  EXPECT_EQ(jpp::Type::False, jpp::JSON::GetType(&value));
+}
+
+TEST(JSONParseTest, ParseTrue) {
+  jpp::Value value{};
+  value.type = jpp::Type::Null;
+
+  EXPECT_EQ(jpp::Result::OK, jpp::JSON::Parse(&value, "true"));
+  EXPECT_EQ(jpp::Type::True, jpp::JSON::GetType(&value));
 }

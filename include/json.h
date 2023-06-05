@@ -56,12 +56,28 @@ class JSON {
   static void ParseWhitespace(Context* context);
 
   /**
-   * @brief null  = "null"
+   * @brief null = "null"
    *
    * @param context
    * @param value
    */
   static Result ParseNull(Context* context, Value* value);
+
+  /**
+   * @brief false = "false"
+   *
+   * @param context
+   * @param value
+   */
+  static Result ParseFalse(Context* context, Value* value);
+
+  /**
+   * @brief true = "true"
+   *
+   * @param context
+   * @param value
+   */
+  static Result ParseTrue(Context* context, Value* value);
 
   /**
    * @brief Get the Type of value
