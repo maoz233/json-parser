@@ -30,7 +30,17 @@ Result JSON::Parse(Value* value, const char* json) {
 
   ParseWhitespace(&context);
 
-  return ParseValue(&context, value);
+  Result result = ParseValue(&context, value);
+
+  if (result == Result::OK) {
+    ParseWhitespace(&context);
+
+    if (*context.json != '\0') {
+      return Result::RootNotSingular;
+    }
+  }
+
+  return result;
 }
 
 Result JSON::ParseValue(Context* context, Value* value) {
