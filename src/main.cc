@@ -11,13 +11,21 @@
 #include <exception>
 #include <iostream>
 
+#include "json.h"
+
 int main(int argc, char** argv) {
   if (!argc || !argv) {
     return EXIT_FAILURE;
   }
 
   try {
-    } catch (const std::exception& e) {
+    jpp::Value value{};
+    ;
+
+    std::cout << (jpp::JSON::Parse(&value, "2.2250738585072009e-308") ==
+                  jpp::Result::NumberTooBig)
+              << std::endl;
+  } catch (const std::exception& e) {
     std::cerr << e.what() << '\n';
 
     return EXIT_FAILURE;

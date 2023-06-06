@@ -16,10 +16,17 @@ namespace jpp {
 enum class Type { Null, False, True, Number, String, Array, Object };
 
 struct Value {
+  double number;
   Type type;
 };
 
-enum class Result { OK, ExpectValue, InvalidValue, RootNotSingular };
+enum class Result {
+  OK,
+  ExpectValue,
+  InvalidValue,
+  RootNotSingular,
+  NumberTooBig
+};
 
 struct Context {
   const char* json;
@@ -80,12 +87,32 @@ class JSON {
   static Result ParseTrue(Context* context, Value* value);
 
   /**
+   * @brief number = [ "-" ] int [ frac ] [ exp ]
+            int = "0" / digit1-9 *digit
+            frac = "." 1*digit
+            exp = ("e" / "E") ["-" / "+"] 1*digit
+   *
+   * @param context
+   * @param value
+   * @return Result
+   */
+  static Result ParseNumber(Context* context, Value* value);
+
+  /**
    * @brief Get the Type of value
    *
    * @param value
    * @return Type
    */
   static Type GetType(const Value* value);
+
+  /**
+   * @brief Get the Number
+   *
+   * @param value
+   * @return double
+   */
+  static double GetNumber(const Value* value);
 
  private:
 };
