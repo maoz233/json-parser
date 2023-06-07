@@ -117,29 +117,9 @@ TEST(JSONParseTest, ParseNumber) {
   EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
   EXPECT_DOUBLE_EQ(1.0000000000000002, jpp::JSON::GetNumber(&value));
 
-  EXPECT_EQ(jpp::Result::OK, jpp::JSON::Parse(&value, "1e-10000"));
+  EXPECT_EQ(jpp::Result::OK, jpp::JSON::Parse(&value, "1.0000000000000002"));
   EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
-  EXPECT_DOUBLE_EQ(0.0, jpp::JSON::GetNumber(&value));
-
-  EXPECT_EQ(jpp::Result::OK,
-            jpp::JSON::Parse(&value, "4.9406564584124654e-324"));
-  EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
-  EXPECT_DOUBLE_EQ(4.9406564584124654e-324, jpp::JSON::GetNumber(&value));
-
-  EXPECT_EQ(jpp::Result::OK,
-            jpp::JSON::Parse(&value, "-4.9406564584124654e-324"));
-  EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
-  EXPECT_DOUBLE_EQ(-4.9406564584124654e-324, jpp::JSON::GetNumber(&value));
-
-  EXPECT_EQ(jpp::Result::OK,
-            jpp::JSON::Parse(&value, "2.2250738585072009e-308"));
-  EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
-  EXPECT_DOUBLE_EQ(2.2250738585072009e-308, jpp::JSON::GetNumber(&value));
-
-  EXPECT_EQ(jpp::Result::OK,
-            jpp::JSON::Parse(&value, "-2.2250738585072009e-308"));
-  EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
-  EXPECT_DOUBLE_EQ(-2.2250738585072009e-308, jpp::JSON::GetNumber(&value));
+  EXPECT_DOUBLE_EQ(1.0000000000000002, jpp::JSON::GetNumber(&value));
 
   EXPECT_EQ(jpp::Result::OK,
             jpp::JSON::Parse(&value, "2.2250738585072014e-308"));
@@ -147,19 +127,23 @@ TEST(JSONParseTest, ParseNumber) {
   EXPECT_DOUBLE_EQ(2.2250738585072014e-308, jpp::JSON::GetNumber(&value));
 
   EXPECT_EQ(jpp::Result::OK,
-            jpp::JSON::Parse(&value, "-2.2250738585072014e-308"));
-  EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
-  EXPECT_DOUBLE_EQ(-2.2250738585072014e-308, jpp::JSON::GetNumber(&value));
-
-  EXPECT_EQ(jpp::Result::OK,
             jpp::JSON::Parse(&value, "1.7976931348623157e+308"));
   EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
   EXPECT_DOUBLE_EQ(1.7976931348623157e+308, jpp::JSON::GetNumber(&value));
 
-  EXPECT_EQ(jpp::Result::OK,
-            jpp::JSON::Parse(&value, "-1.7976931348623157e+308"));
+  EXPECT_EQ(jpp::Result::NumberTooBig, jpp::JSON::Parse(&value, "1e-10000"));
   EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
-  EXPECT_DOUBLE_EQ(-1.7976931348623157e+308, jpp::JSON::GetNumber(&value));
+  EXPECT_DOUBLE_EQ(0.0, jpp::JSON::GetNumber(&value));
+
+  EXPECT_EQ(jpp::Result::NumberTooBig,
+            jpp::JSON::Parse(&value, "4.9406564584124654e-324"));
+  EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
+  EXPECT_DOUBLE_EQ(4.9406564584124654e-324, jpp::JSON::GetNumber(&value));
+
+  EXPECT_EQ(jpp::Result::NumberTooBig,
+            jpp::JSON::Parse(&value, "2.2250738585072009e-308"));
+  EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
+  EXPECT_DOUBLE_EQ(2.2250738585072009e-308, jpp::JSON::GetNumber(&value));
 
   EXPECT_EQ(jpp::Result::InvalidValue, jpp::JSON::Parse(&value, "+0"));
   EXPECT_EQ(jpp::Result::InvalidValue, jpp::JSON::Parse(&value, ".123"));
