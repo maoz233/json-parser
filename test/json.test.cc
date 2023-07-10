@@ -23,27 +23,48 @@ TEST(JSONParseTest, ParseNull) {
   EXPECT_EQ(jpp::Result::InvalidValue, jpp::JSON::Parse(&value, "nul"));
   EXPECT_EQ(jpp::Result::RootNotSingular, jpp::JSON::Parse(&value, "null x"));
   EXPECT_EQ(jpp::Type::Null, jpp::JSON::GetType(&value));
+
+  jpp::JSON::FreeValue(&value);
 }
 
 TEST(JSONParseTest, ParseFalse) {
   jpp::Value value{};
-  value.type = jpp::Type::Null;
+  jpp::JSON::InitValue(&value);
 
   EXPECT_EQ(jpp::Result::OK, jpp::JSON::Parse(&value, "false"));
   EXPECT_EQ(jpp::Type::False, jpp::JSON::GetType(&value));
+
+  jpp::JSON::FreeValue(&value);
 }
 
 TEST(JSONParseTest, ParseTrue) {
   jpp::Value value{};
-  value.type = jpp::Type::Null;
+  jpp::JSON::InitValue(&value);
 
   EXPECT_EQ(jpp::Result::OK, jpp::JSON::Parse(&value, "true"));
   EXPECT_EQ(jpp::Type::True, jpp::JSON::GetType(&value));
+
+  jpp::JSON::FreeValue(&value);
+}
+
+TEST(JSONParseTest, AccessBoolean) {
+  jpp::Value value{};
+  jpp::JSON::InitValue(&value);
+
+  jpp::JSON::SetBoolean(&value, true);
+  EXPECT_EQ(jpp::Type::True, value.type);
+  EXPECT_EQ(jpp::JSON::GetBoolean(&value), true);
+
+  jpp::JSON::SetBoolean(&value, false);
+  EXPECT_EQ(jpp::Type::False, value.type);
+  EXPECT_EQ(jpp::JSON::GetBoolean(&value), false);
+
+  jpp::JSON::FreeValue(&value);
 }
 
 TEST(JSONParseTest, ParseNumber) {
   jpp::Value value{};
-  value.type = jpp::Type::Null;
+  jpp::JSON::InitValue(&value);
 
   EXPECT_EQ(jpp::Result::OK, jpp::JSON::Parse(&value, "0"));
   EXPECT_EQ(jpp::Type::Number, jpp::JSON::GetType(&value));
@@ -152,4 +173,29 @@ TEST(JSONParseTest, ParseNumber) {
   EXPECT_EQ(jpp::Result::InvalidValue, jpp::JSON::Parse(&value, "inf"));
   EXPECT_EQ(jpp::Result::InvalidValue, jpp::JSON::Parse(&value, "NAN"));
   EXPECT_EQ(jpp::Result::InvalidValue, jpp::JSON::Parse(&value, "nan"));
+
+  jpp::JSON::FreeValue(&value);
+}
+
+TEST(JSONParseTest, AccessNumber) {
+  jpp::Value value{};
+  jpp::JSON::InitValue(&value);
+
+  jpp::JSON::SetNumber(&value, 1234.5678);
+  EXPECT_EQ(jpp::Type::Number, value.type);
+  EXPECT_DOUBLE_EQ(jpp::JSON::GetNumber(&value), 1234.5678);
+
+  jpp::JSON::FreeValue(&value);
+}
+
+TEST(JSONParseTest, ParseString) {
+  jpp::Value value{};
+  jpp::JSON::InitValue(&value);
+
+  EXPECT_EQ(jpp::Result::OK, jpp::JSON::Parse(&value, "\"\""));
+  EXPECT_EQ(jpp::Type::String, jpp::JSON::GetType(&value));
+  EXPECT_STREQ("", jpp::JSON::GetString(&value));
+  EXPECT_EQ(static_cast<std::size_t>(0), jpp::JSON::GetStringLength(&value));
+
+  jpp::JSON::FreeValue(&value);
 }
